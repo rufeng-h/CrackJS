@@ -1,7 +1,6 @@
 import copy
 import re
 import time
-from pprint import pprint
 
 import requests
 
@@ -21,12 +20,6 @@ sso_headers['Host'] = "sso.kongzhong.com"
 sso_headers['Referer'] = 'https://passport.kongzhong.com'
 
 
-# sso_headers['cache-control'] = 'no-cache'
-# sso_headers['Sec-Fetch-Dest'] = "script"
-# sso_headers['Sec-Fetch-Mode'] = "no-cors"
-# sso_headers['Sec-Fetch-Site'] = "same-site"
-
-
 def get_dc():
     res = session.get(
         "https://sso.kongzhong.com/ajaxLogin?j=j&jsonp=j&service=https://passport.kongzhong.com/&_=" + str(
@@ -38,13 +31,15 @@ def get_dc():
 
 
 if __name__ == '__main__':
-    username, password = "19982070674", "h2517285841."
+    username, password = "", ""
+
     session.get("https://passport.kongzhong.com/login", headers=headers)
     session.get("https://sso.kongzhong.com/createQRCode", headers=sso_headers)
     dc = get_dc()
     enc_pwd = session.get("http://localhost:8000", params={"pwd": password, "salt": dc}).text
 
     login_url = "https://sso.kongzhong.com/ajaxLogin?j=j&&type=1&service=https://passport.kongzhong.com/&username={}&password={}&vcode=&toSave=0&_={}"
+    # 太快了不行
     time.sleep(5)
     res = session.get(login_url.format(username, enc_pwd, int(time.time() * 1000)), headers=sso_headers)
     print(res.text)
