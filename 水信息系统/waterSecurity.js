@@ -1,4 +1,4 @@
-waterSecurity = {
+const waterSecurity = {
     version: "2.1",
     init: function () {
         String.prototype.gblen = function () {
@@ -171,21 +171,15 @@ waterSecurity = {
                         t.push(String.fromCharCode((15 & h) << 12 | (63 & n) << 6 | (63 & i) << 0))
             }
         return t.join("")
-    }
-};
-const paramEncode = function (e) {
-    waterSecurity.init();
-    for (var t in e)
-        e[t] || (e[t] = ""),
-        "" == e[t] && 0 != e[t] || (e[t] = waterSecurity.encode(e[t]));
-    return e.waterEncode = waterSecurity.encode("true"),
-        e
-}
-e = {
-    "hourClass": "1,2,3,6,12",
-    "name": "SelectRainWarnInfo",
-    "snsw": "sn",
-    "time": ""
-}
-console.log(paramEncode(e));
+    },
+    paramEncode: function (e) {
+        for (var t in e)
+            e[t] || (e[t] = ""),
+            "" == e[t] && 0 != e[t] || (e[t] = this.encode(e[t]));
+        return e.waterEncode = this.encode("true"),
+            e
+    },
 
+};
+waterSecurity.init();
+module.exports = waterSecurity
