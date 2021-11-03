@@ -1,4 +1,4 @@
-function encrypt(str, pwd) {
+module.exports = function encrypt(str, pwd) {
     if (pwd == null || pwd.length <= 0) {
         return null
     }
@@ -41,5 +41,3 @@ function encrypt(str, pwd) {
     enc_str += salt;
     return enc_str
 }
-
-console.log(encrypt("h2517285841.", "51CDF5105B4D0CC61FDE036CE63DA8BE"))
