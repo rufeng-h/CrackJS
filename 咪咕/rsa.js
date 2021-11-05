@@ -1,5 +1,6 @@
 const window = global;
 const navigator = {"appName": 'Netscape'};
+
 const rsa = (function () {
     function d(a, b, c) {
         null != a && ("number" == typeof a ? this.fromNumber(a, b, c) : null == b && "string" != typeof a ? this.fromString(a, 256) : this.fromString(a, b))
