@@ -81,11 +81,11 @@ browser_feature = {
     "os_version": "10",
     "languages": "zh-CN",
     "navigator_keys": "vendorSub|productSub|vendor|maxTouchPoints|userActivation|doNotTrack|geolocation|connection|plugins|mimeTypes|webkitTemporaryStorage|webkitPersistentStorage|hardwareConcurrency|cookieEnabled|appCodeName|appName|appVersion|platform|product|userAgent|language|languages|onLine|webdriver|getBattery|getGamepads|javaEnabled|sendBeacon|vibrate|pdfViewerEnabled|scheduling|bluetooth|clipboard|credentials|keyboard|managed|mediaDevices|storage|serviceWorker|wakeLock|deviceMemory|ink|hid|locks|mediaCapabilities|mediaSession|permissions|presentation|serial|virtualKeyboard|usb|xr|userAgentData|canShare|share|clearAppBadge|setAppBadge|getInstalledRelatedApps|getUserMedia|requestMIDIAccess|requestMediaKeySystemAccess|webkitGetUserMedia|registerProtocolHandler|unregisterProtocolHandler",
-    "uuid": "580681b1-ab08-4291-ae71-166ce7811873",
     # 下面几个可变
+    "uuid": "",
     "xxzl_cid": "",
     "sessionid": "",
     "xxzl_deviceid": "",
-    "id58": "CpQB3mGErkgEO5hZA6wnAg==|-1|-1|-1|-1",
-    "local_time": 1636087225475,
+    "id58": "",
+    "local_time": "",
 }

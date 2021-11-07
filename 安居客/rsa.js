@@ -1,484 +1,453 @@
-function setMaxDigits(n) {
-    maxDigits = n;
-    ZERO_ARRAY = new Array(maxDigits);
-    for (var t = 0; t < ZERO_ARRAY.length; t++)
-        ZERO_ARRAY[t] = 0;
-    bigZero = new BigInt;
-    bigOne = new BigInt;
-    bigOne.digits[0] = 1
+module.exports = function encryptString(pwd) {
+    var r = RSAUtils.getKeyPair("010001", "", "008baf14121377fc76eaf7794b8a8af17085628c3590df47e6534574efcfd81ef8635fcdc67d141c15f51649a89533df0db839331e30b8f8e4440ebf7ccbcc494f4ba18e9f492534b8aafc1b1057429ac851d3d9eb66e86fce1b04527c7b95a2431b07ea277cde2365876e2733325df04389a9d891c5d36b7bc752140db74cb69f");
+    return RSAUtils.encryptedString(r, "1411093327735" + pwd)
 }
 
-function BigInt(n) {
-    this.digits = typeof n == "boolean" && n == !0 ? null : ZERO_ARRAY.slice(0);
-    this.isNeg = !1
-}
+!function (e) {
+    void 0 === e.RSAUtils && (e.RSAUtils = {});
 
-function biFromDecimal(n) {
-    for (var u = n.charAt(0) == "-", t = u ? 1 : 0, i, f, r; t < n.length && n.charAt(t) == "0";)
-        ++t;
-    if (t == n.length)
-        i = new BigInt;
-    else {
-        for (f = n.length - t,
-                 r = f % dpl10,
-             r == 0 && (r = dpl10),
-                 i = biFromNumber(Number(n.substr(t, r))),
-                 t += r; t < n.length;)
-            i = biAdd(biMultiply(i, lr10), biFromNumber(Number(n.substr(t, dpl10)))),
-                t += dpl10;
-        i.isNeg = u
+    function v(i) {
+        this.digits = "boolean" == typeof i && 1 == i ? null : s.slice(0),
+            this.isNeg = !1
     }
-    return i
-}
 
-function biCopy(n) {
-    var t = new BigInt(!0);
-    return t.digits = n.digits.slice(0),
-        t.isNeg = n.isNeg,
-        t
-}
-
-function biFromNumber(n) {
-    var t = new BigInt, i;
-    for (t.isNeg = n < 0,
-             n = Math.abs(n),
-             i = 0; n > 0;)
-        t.digits[i++] = n & maxDigitVal,
-            n = Math.floor(n / biRadix);
-    return t
-}
-
-function reverseStr(n) {
-    for (var i = "", t = n.length - 1; t > -1; --t)
-        i += n.charAt(t);
-    return i
-}
-
-function biToString(n, t) {
-    var r = new BigInt, i, u;
-    for (r.digits[0] = t,
-             i = biDivideModulo(n, r),
-             u = hexatrigesimalToChar[i[1].digits[0]]; biCompare(i[0], bigZero) == 1;)
-        i = biDivideModulo(i[0], r),
-            digit = i[1].digits[0],
-            u += hexatrigesimalToChar[i[1].digits[0]];
-    return (n.isNeg ? "-" : "") + reverseStr(u)
-}
-
-function biToDecimal(n) {
-    var i = new BigInt, t, r;
-    for (i.digits[0] = 10,
-             t = biDivideModulo(n, i),
-             r = String(t[1].digits[0]); biCompare(t[0], bigZero) == 1;)
-        t = biDivideModulo(t[0], i),
-            r += String(t[1].digits[0]);
-    return (n.isNeg ? "-" : "") + reverseStr(r)
-}
-
-function digitToHex(n) {
-    var t = "";
-    for (i = 0; i < 4; ++i)
-        t += hexToChar[n & 15],
-            n >>>= 4;
-    return reverseStr(t)
-}
-
-function biToHex(n) {
-    for (var i = "", r = biHighIndex(n), t = biHighIndex(n); t > -1; --t)
-        i += digitToHex(n.digits[t]);
-    return i
-}
-
-function charToHex(n) {
-    var t = 48
-        , u = t + 9
-        , i = 97
-        , f = i + 25
-        , r = 65;
-    return n >= t && n <= u ? n - t : n >= r && n <= 90 ? 10 + n - r : n >= i && n <= f ? 10 + n - i : 0
-}
-
-function hexToDigit(n) {
-    for (var t = 0, r = Math.min(n.length, 4), i = 0; i < r; ++i)
-        t <<= 4,
-            t |= charToHex(n.charCodeAt(i));
-    return t
-}
-
-function biFromHex(n) {
-    for (var i = new BigInt, u = n.length, t = u, r = 0; t > 0; t -= 4,
-        ++r)
-        i.digits[r] = hexToDigit(n.substr(Math.max(t - 4, 0), Math.min(t, 4)));
-    return i
-}
-
-function biFromString(n, t) {
-    var f = n.charAt(0) == "-", e = f ? 1 : 0, i = new BigInt, r = new BigInt, u;
-    for (r.digits[0] = 1,
-             u = n.length - 1; u >= e; u--) {
-        var o = n.charCodeAt(u)
-            , s = charToHex(o)
-            , h = biMultiplyDigit(r, s);
-        i = biAdd(i, h);
-        r = biMultiplyDigit(r, t)
+    var s, g, c, N = 16, m = 65536, M = m - 1;
+    e.BigInt || (e.BigInt = v),
+        RSAUtils.setMaxDigits = function (i) {
+            s = new Array(i);
+            for (var t = 0; t < s.length; t++)
+                s[t] = 0;
+            g = new v,
+                (c = new v).digits[0] = 1
+        }
+        ,
+        RSAUtils.setMaxDigits(20);
+    RSAUtils.biFromNumber = function (i) {
+        var t = new v;
+        t.isNeg = i < 0,
+            i = Math.abs(i);
+        for (var s = 0; 0 < i;)
+            t.digits[s++] = i & M,
+                i = Math.floor(i / m);
+        return t
     }
-    return i.isNeg = f,
-        i
-}
-
-function biDump(n) {
-    return (n.isNeg ? "-" : "") + n.digits.join(" ")
-}
-
-function biAdd(n, t) {
-    var r, u, f, i;
-    if (n.isNeg != t.isNeg)
-        t.isNeg = !t.isNeg,
-            r = biSubtract(n, t),
-            t.isNeg = !t.isNeg;
-    else {
-        for (r = new BigInt,
-                 u = 0,
-                 i = 0; i < n.digits.length; ++i)
-            f = n.digits[i] + t.digits[i] + u,
-                r.digits[i] = f % biRadix,
-                u = Number(f >= biRadix);
-        r.isNeg = n.isNeg
+    ;
+    var l = RSAUtils.biFromNumber(1e15);
+    RSAUtils.biFromDecimal = function (i) {
+        for (var t, s = "-" == i.charAt(0), r = s ? 1 : 0; r < i.length && "0" == i.charAt(r);)
+            ++r;
+        if (r == i.length)
+            t = new v;
+        else {
+            var e = (i.length - r) % 15;
+            for (0 == e && (e = 15),
+                     t = RSAUtils.biFromNumber(Number(i.substr(r, e))),
+                     r += e; r < i.length;)
+                t = RSAUtils.biAdd(RSAUtils.biMultiply(t, l), RSAUtils.biFromNumber(Number(i.substr(r, 15)))),
+                    r += 15;
+            t.isNeg = s
+        }
+        return t
     }
-    return r
-}
-
-function biSubtract(n, t) {
-    var r, f, u, i;
-    if (n.isNeg != t.isNeg)
-        t.isNeg = !t.isNeg,
-            r = biAdd(n, t),
-            t.isNeg = !t.isNeg;
-    else {
-        for (r = new BigInt,
-                 u = 0,
-                 i = 0; i < n.digits.length; ++i)
-            f = n.digits[i] - t.digits[i] + u,
-                r.digits[i] = f % biRadix,
-            r.digits[i] < 0 && (r.digits[i] += biRadix),
-                u = 0 - Number(f < 0);
-        if (u == -1) {
-            for (u = 0,
-                     i = 0; i < n.digits.length; ++i)
-                f = 0 - r.digits[i] + u,
-                    r.digits[i] = f % biRadix,
-                r.digits[i] < 0 && (r.digits[i] += biRadix),
-                    u = 0 - Number(f < 0);
-            r.isNeg = !n.isNeg
-        } else
-            r.isNeg = n.isNeg
+        ,
+        RSAUtils.biCopy = function (i) {
+            var t = new v(!0);
+            return t.digits = i.digits.slice(0),
+                t.isNeg = i.isNeg,
+                t
+        }
+        ,
+        RSAUtils.reverseStr = function (i) {
+            for (var t = "", s = i.length - 1; -1 < s; --s)
+                t += i.charAt(s);
+            return t
+        }
+    ;
+    var n = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    RSAUtils.biToString = function (i, t) {
+        var s = new v;
+        s.digits[0] = t;
+        for (var r = RSAUtils.biDivideModulo(i, s), e = n[r[1].digits[0]]; 1 == RSAUtils.biCompare(r[0], g);)
+            r = RSAUtils.biDivideModulo(r[0], s),
+                digit = r[1].digits[0],
+                e += n[r[1].digits[0]];
+        return (i.isNeg ? "-" : "") + RSAUtils.reverseStr(e)
     }
-    return r
-}
-
-function biHighIndex(n) {
-    for (var t = n.digits.length - 1; t > 0 && n.digits[t] == 0;)
-        --t;
-    return t
-}
-
-function biNumBits(n) {
-    for (var i = biHighIndex(n), r = n.digits[i], u = (i + 1) * bitsPerDigit, t = u; t > u - bitsPerDigit; --t) {
-        if ((r & 32768) != 0)
-            break;
-        r <<= 1
+        ,
+        RSAUtils.biToDecimal = function (i) {
+            var t = new v;
+            t.digits[0] = 10;
+            for (var s = RSAUtils.biDivideModulo(i, t), r = String(s[1].digits[0]); 1 == RSAUtils.biCompare(s[0], g);)
+                s = RSAUtils.biDivideModulo(s[0], t),
+                    r += String(s[1].digits[0]);
+            return (i.isNeg ? "-" : "") + RSAUtils.reverseStr(r)
+        }
+    ;
+    var r = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
+    RSAUtils.digitToHex = function (t) {
+        var s = "";
+        for (i = 0; i < 4; ++i)
+            s += r[15 & t],
+                t >>>= 4;
+        return RSAUtils.reverseStr(s)
     }
-    return t
-}
-
-function biMultiply(n, t) {
-    for (var i = new BigInt, u, o = biHighIndex(n), s = biHighIndex(t), e, f, r = 0; r <= s; ++r) {
-        for (u = 0,
-                 f = r,
-                 j = 0; j <= o; ++j,
-                 ++f)
-            e = i.digits[f] + n.digits[j] * t.digits[r] + u,
-                i.digits[f] = e & maxDigitVal,
-                u = e >>> biRadixBits;
-        i.digits[r + o + 1] = u
+        ,
+        RSAUtils.biToHex = function (i) {
+            for (var t = "", s = (RSAUtils.biHighIndex(i),
+                RSAUtils.biHighIndex(i)); -1 < s; --s)
+                t += RSAUtils.digitToHex(i.digits[s]);
+            return t
+        }
+        ,
+        RSAUtils.charToHex = function (i) {
+            return 48 <= i && i <= 57 ? i - 48 : 65 <= i && i <= 90 ? 10 + i - 65 : 97 <= i && i <= 122 ? 10 + i - 97 : 0
+        }
+        ,
+        RSAUtils.hexToDigit = function (i) {
+            for (var t = 0, s = Math.min(i.length, 4), r = 0; r < s; ++r)
+                t <<= 4,
+                    t |= RSAUtils.charToHex(i.charCodeAt(r));
+            return t
+        }
+        ,
+        RSAUtils.biFromHex = function (i) {
+            for (var t = new v, s = i.length, r = 0; 0 < s; s -= 4,
+                ++r)
+                t.digits[r] = RSAUtils.hexToDigit(i.substr(Math.max(s - 4, 0), Math.min(s, 4)));
+            return t
+        }
+        ,
+        RSAUtils.biFromString = function (i, t) {
+            var s = "-" == i.charAt(0)
+                , r = s ? 1 : 0
+                , e = new v
+                , g = new v;
+            g.digits[0] = 1;
+            for (var l = i.length - 1; r <= l; l--) {
+                var n = i.charCodeAt(l)
+                    , d = RSAUtils.charToHex(n)
+                    , o = RSAUtils.biMultiplyDigit(g, d);
+                e = RSAUtils.biAdd(e, o),
+                    g = RSAUtils.biMultiplyDigit(g, t)
+            }
+            return e.isNeg = s,
+                e
+        }
+        ,
+        RSAUtils.biDump = function (i) {
+            return (i.isNeg ? "-" : "") + i.digits.join(" ")
+        }
+        ,
+        RSAUtils.biAdd = function (i, t) {
+            var s;
+            if (i.isNeg != t.isNeg)
+                t.isNeg = !t.isNeg,
+                    s = RSAUtils.biSubtract(i, t),
+                    t.isNeg = !t.isNeg;
+            else {
+                s = new v;
+                for (var r, e = 0, g = 0; g < i.digits.length; ++g)
+                    r = i.digits[g] + t.digits[g] + e,
+                        s.digits[g] = r % m,
+                        e = Number(m <= r);
+                s.isNeg = i.isNeg
+            }
+            return s
+        }
+        ,
+        RSAUtils.biSubtract = function (i, t) {
+            var s;
+            if (i.isNeg != t.isNeg)
+                t.isNeg = !t.isNeg,
+                    s = RSAUtils.biAdd(i, t),
+                    t.isNeg = !t.isNeg;
+            else {
+                var r, e;
+                s = new v;
+                for (var g = e = 0; g < i.digits.length; ++g)
+                    r = i.digits[g] - t.digits[g] + e,
+                        s.digits[g] = r % m,
+                    s.digits[g] < 0 && (s.digits[g] += m),
+                        e = 0 - Number(r < 0);
+                if (-1 == e) {
+                    for (g = e = 0; g < i.digits.length; ++g)
+                        r = 0 - s.digits[g] + e,
+                            s.digits[g] = r % m,
+                        s.digits[g] < 0 && (s.digits[g] += m),
+                            e = 0 - Number(r < 0);
+                    s.isNeg = !i.isNeg
+                } else
+                    s.isNeg = i.isNeg
+            }
+            return s
+        }
+        ,
+        RSAUtils.biHighIndex = function (i) {
+            for (var t = i.digits.length - 1; 0 < t && 0 == i.digits[t];)
+                --t;
+            return t
+        }
+        ,
+        RSAUtils.biNumBits = function (i) {
+            var t, s = RSAUtils.biHighIndex(i), r = i.digits[s], e = (s + 1) * N;
+            for (t = e; e - N < t && 0 == (32768 & r); --t)
+                r <<= 1;
+            return t
+        }
+        ,
+        RSAUtils.biMultiply = function (i, t) {
+            for (var s, r, e, g = new v, l = RSAUtils.biHighIndex(i), n = RSAUtils.biHighIndex(t), d = 0; d <= n; ++d) {
+                for (e = d,
+                         j = s = 0; j <= l; ++j,
+                         ++e)
+                    r = g.digits[e] + i.digits[j] * t.digits[d] + s,
+                        g.digits[e] = r & M,
+                        s = r >>> 16;
+                g.digits[d + l + 1] = s
+            }
+            return g.isNeg = i.isNeg != t.isNeg,
+                g
+        }
+        ,
+        RSAUtils.biMultiplyDigit = function (i, t) {
+            var s, r, e;
+            result = new v,
+                s = RSAUtils.biHighIndex(i);
+            for (var g = r = 0; g <= s; ++g)
+                e = result.digits[g] + i.digits[g] * t + r,
+                    result.digits[g] = e & M,
+                    r = e >>> 16;
+            return result.digits[1 + s] = r,
+                result
+        }
+        ,
+        RSAUtils.arrayCopy = function (i, t, s, r, e) {
+            for (var g = Math.min(t + e, i.length), l = t, n = r; l < g; ++l,
+                ++n)
+                s[n] = i[l]
+        }
+    ;
+    var d = [0, 32768, 49152, 57344, 61440, 63488, 64512, 65024, 65280, 65408, 65472, 65504, 65520, 65528, 65532, 65534, 65535];
+    RSAUtils.biShiftLeft = function (i, t) {
+        var s = Math.floor(t / N)
+            , r = new v;
+        RSAUtils.arrayCopy(i.digits, 0, r.digits, s, r.digits.length - s);
+        for (var e = t % N, g = N - e, l = r.digits.length - 1, n = l - 1; 0 < l; --l,
+            --n)
+            r.digits[l] = r.digits[l] << e & M | (r.digits[n] & d[e]) >>> g;
+        return r.digits[0] = r.digits[l] << e & M,
+            r.isNeg = i.isNeg,
+            r
     }
-    return i.isNeg = n.isNeg != t.isNeg,
-        i
-}
+    ;
+    var o = [0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535];
 
-function biMultiplyDigit(n, t) {
-    var u, r, f, i;
-    for (result = new BigInt,
-             u = biHighIndex(n),
-             r = 0,
-             i = 0; i <= u; ++i)
-        f = result.digits[i] + n.digits[i] * t + r,
-            result.digits[i] = f & maxDigitVal,
-            r = f >>> biRadixBits;
-    return result.digits[1 + u] = r,
-        result
-}
-
-function arrayCopy(n, t, i, r, u) {
-    for (var o = Math.min(t + u, n.length), f = t, e = r; f < o; ++f,
-        ++e)
-        i[e] = n[f]
-}
-
-function biShiftLeft(n, t) {
-    var e = Math.floor(t / bitsPerDigit), i = new BigInt, u, o, r, f;
-    for (arrayCopy(n.digits, 0, i.digits, e, i.digits.length - e),
-             u = t % bitsPerDigit,
-             o = bitsPerDigit - u,
-             r = i.digits.length - 1,
-             f = r - 1; r > 0; --r,
-             --f)
-        i.digits[r] = i.digits[r] << u & maxDigitVal | (i.digits[f] & highBitMasks[u]) >>> o;
-    return i.digits[0] = i.digits[r] << u & maxDigitVal,
-        i.isNeg = n.isNeg,
-        i
-}
-
-function biShiftRight(n, t) {
-    var e = Math.floor(t / bitsPerDigit), i = new BigInt, u, o, r, f;
-    for (arrayCopy(n.digits, e, i.digits, 0, n.digits.length - e),
-             u = t % bitsPerDigit,
-             o = bitsPerDigit - u,
-             r = 0,
-             f = r + 1; r < i.digits.length - 1; ++r,
-             ++f)
-        i.digits[r] = i.digits[r] >>> u | (i.digits[f] & lowBitMasks[u]) << o;
-    return i.digits[i.digits.length - 1] >>>= u,
-        i.isNeg = n.isNeg,
-        i
-}
-
-function biMultiplyByRadixPower(n, t) {
-    var i = new BigInt;
-    return arrayCopy(n.digits, 0, i.digits, t, i.digits.length - t),
-        i
-}
-
-function biDivideByRadixPower(n, t) {
-    var i = new BigInt;
-    return arrayCopy(n.digits, t, i.digits, 0, i.digits.length - t),
-        i
-}
-
-function biModuloByRadixPower(n, t) {
-    var i = new BigInt;
-    return arrayCopy(n.digits, 0, i.digits, 0, t),
-        i
-}
-
-function biCompare(n, t) {
-    if (n.isNeg != t.isNeg)
-        return 1 - 2 * Number(n.isNeg);
-    for (var i = n.digits.length - 1; i >= 0; --i)
-        if (n.digits[i] != t.digits[i])
-            return n.isNeg ? 1 - 2 * Number(n.digits[i] > t.digits[i]) : 1 - 2 * Number(n.digits[i] < t.digits[i]);
-    return 0
-}
-
-function biDivideModulo(n, t) {
-    var a = biNumBits(n), s = biNumBits(t), v = t.isNeg, r, i, u, e, h, o, f, y, p;
-    if (a < s)
-        return n.isNeg ? (r = biCopy(bigOne),
-            r.isNeg = !t.isNeg,
-            n.isNeg = !1,
-            t.isNeg = !1,
-            i = biSubtract(t, n),
-            n.isNeg = !0,
-            t.isNeg = v) : (r = new BigInt,
-            i = biCopy(n)),
-            [r, i];
-    for (r = new BigInt,
-             i = n,
-             u = Math.ceil(s / bitsPerDigit) - 1,
-             e = 0; t.digits[u] < biHalfRadix;)
-        t = biShiftLeft(t, 1),
-            ++e,
-            ++s,
-            u = Math.ceil(s / bitsPerDigit) - 1;
-    for (i = biShiftLeft(i, e),
-             a += e,
-             h = Math.ceil(a / bitsPerDigit) - 1,
-             o = biMultiplyByRadixPower(t, h - u); biCompare(i, o) != -1;)
-        ++r.digits[h - u],
-            i = biSubtract(i, o);
-    for (f = h; f > u; --f) {
-        var c = f >= i.digits.length ? 0 : i.digits[f]
-            , w = f - 1 >= i.digits.length ? 0 : i.digits[f - 1]
-            , b = f - 2 >= i.digits.length ? 0 : i.digits[f - 2]
-            , l = u >= t.digits.length ? 0 : t.digits[u]
-            , k = u - 1 >= t.digits.length ? 0 : t.digits[u - 1];
-        for (r.digits[f - u - 1] = c == l ? maxDigitVal : Math.floor((c * biRadix + w) / l),
-                 y = r.digits[f - u - 1] * (l * biRadix + k),
-                 p = c * biRadixSquared + (w * biRadix + b); y > p;)
-            --r.digits[f - u - 1],
-                y = r.digits[f - u - 1] * (l * biRadix | k),
-                p = c * biRadix * biRadix + (w * biRadix + b);
-        o = biMultiplyByRadixPower(t, f - u - 1);
-        i = biSubtract(i, biMultiplyDigit(o, r.digits[f - u - 1]));
-        i.isNeg && (i = biAdd(i, o),
-            --r.digits[f - u - 1])
+    function u(i) {
+        var t = RSAUtils
+            , s = t.biDivideByRadixPower(i, this.k - 1)
+            , r = t.biMultiply(s, this.mu)
+            , e = t.biDivideByRadixPower(r, this.k + 1)
+            , g = t.biModuloByRadixPower(i, this.k + 1)
+            , l = t.biMultiply(e, this.modulus)
+            , n = t.biModuloByRadixPower(l, this.k + 1)
+            , d = t.biSubtract(g, n);
+        d.isNeg && (d = t.biAdd(d, this.bkplus1));
+        for (var o = 0 <= t.biCompare(d, this.modulus); o;)
+            d = t.biSubtract(d, this.modulus),
+                o = 0 <= t.biCompare(d, this.modulus);
+        return d
     }
-    return i = biShiftRight(i, e),
-        r.isNeg = n.isNeg != v,
-    n.isNeg && (r = v ? biAdd(r, bigOne) : biSubtract(r, bigOne),
-        t = biShiftRight(t, e),
-        i = biSubtract(t, i)),
-    i.digits[0] == 0 && biHighIndex(i) == 0 && (i.isNeg = !1),
-        [r, i]
-}
 
-function biDivide(n, t) {
-    return biDivideModulo(n, t)[0]
-}
-
-function biModulo(n, t) {
-    return biDivideModulo(n, t)[1]
-}
-
-function biMultiplyMod(n, t, i) {
-    return biModulo(biMultiply(n, t), i)
-}
-
-function biPow(n, t) {
-    for (var r = bigOne, i = n; ;) {
-        if ((t & 1) != 0 && (r = biMultiply(r, i)),
-            t >>= 1,
-        t == 0)
-            break;
-        i = biMultiply(i, i)
+    function S(i, t) {
+        var s = RSAUtils.biMultiply(i, t);
+        return this.modulo(s)
     }
-    return r
-}
 
-function biPowMod(n, t, i) {
-    for (var f = bigOne, u = n, r = t; ;) {
-        if ((r.digits[0] & 1) != 0 && (f = biMultiplyMod(f, u, i)),
-            r = biShiftRight(r, 1),
-        r.digits[0] == 0 && biHighIndex(r) == 0)
-            break;
-        u = biMultiplyMod(u, u, i)
+    function a(i, t) {
+        var s = new v;
+        s.digits[0] = 1;
+        for (var r = i, e = t; 0 != (1 & e.digits[0]) && (s = this.multiplyMod(s, r)),
+        0 != (e = RSAUtils.biShiftRight(e, 1)).digits[0] || 0 != RSAUtils.biHighIndex(e);)
+            r = this.multiplyMod(r, r);
+        return s
     }
-    return f
-}
 
-function BarrettMu(n) {
-    this.modulus = biCopy(n);
-    this.k = biHighIndex(this.modulus) + 1;
-    var t = new BigInt;
-    t.digits[2 * this.k] = 1;
-    this.mu = biDivide(t, this.modulus);
-    this.bkplus1 = new BigInt;
-    this.bkplus1.digits[this.k + 1] = 1;
-    this.modulo = BarrettMu_modulo;
-    this.multiplyMod = BarrettMu_multiplyMod;
-    this.powMod = BarrettMu_powMod
-}
-
-function BarrettMu_modulo(n) {
-    var r = biDivideByRadixPower(n, this.k - 1), u = biMultiply(r, this.mu), f = biDivideByRadixPower(u, this.k + 1),
-        e = biModuloByRadixPower(n, this.k + 1), o = biMultiply(f, this.modulus),
-        s = biModuloByRadixPower(o, this.k + 1), t = biSubtract(e, s), i;
-    for (t.isNeg && (t = biAdd(t, this.bkplus1)),
-             i = biCompare(t, this.modulus) >= 0; i;)
-        t = biSubtract(t, this.modulus),
-            i = biCompare(t, this.modulus) >= 0;
-    return t
-}
-
-function BarrettMu_multiplyMod(n, t) {
-    var i = biMultiply(n, t);
-    return this.modulo(i)
-}
-
-function BarrettMu_powMod(n, t) {
-    var u = new BigInt, r, i;
-    for (u.digits[0] = 1,
-             r = n,
-             i = t; ;) {
-        if ((i.digits[0] & 1) != 0 && (u = this.multiplyMod(u, r)),
-            i = biShiftRight(i, 1),
-        i.digits[0] == 0 && biHighIndex(i) == 0)
-            break;
-        r = this.multiplyMod(r, r)
+    RSAUtils.biShiftRight = function (i, t) {
+        var s = Math.floor(t / N)
+            , r = new v;
+        RSAUtils.arrayCopy(i.digits, s, r.digits, 0, i.digits.length - s);
+        for (var e = t % N, g = N - e, l = 0, n = l + 1; l < r.digits.length - 1; ++l,
+            ++n)
+            r.digits[l] = r.digits[l] >>> e | (r.digits[n] & o[e]) << g;
+        return r.digits[r.digits.length - 1] >>>= e,
+            r.isNeg = i.isNeg,
+            r
     }
-    return u
-}
+        ,
+        RSAUtils.biMultiplyByRadixPower = function (i, t) {
+            var s = new v;
+            return RSAUtils.arrayCopy(i.digits, 0, s.digits, t, s.digits.length - t),
+                s
+        }
+        ,
+        RSAUtils.biDivideByRadixPower = function (i, t) {
+            var s = new v;
+            return RSAUtils.arrayCopy(i.digits, t, s.digits, 0, s.digits.length - t),
+                s
+        }
+        ,
+        RSAUtils.biModuloByRadixPower = function (i, t) {
+            var s = new v;
+            return RSAUtils.arrayCopy(i.digits, 0, s.digits, 0, t),
+                s
+        }
+        ,
+        RSAUtils.biCompare = function (i, t) {
+            if (i.isNeg != t.isNeg)
+                return 1 - 2 * Number(i.isNeg);
+            for (var s = i.digits.length - 1; 0 <= s; --s)
+                if (i.digits[s] != t.digits[s])
+                    return i.isNeg ? 1 - 2 * Number(i.digits[s] > t.digits[s]) : 1 - 2 * Number(i.digits[s] < t.digits[s]);
+            return 0
+        }
+        ,
+        RSAUtils.biDivideModulo = function (i, t) {
+            var s, r, e = RSAUtils.biNumBits(i), g = RSAUtils.biNumBits(t), l = t.isNeg;
+            if (e < g)
+                return i.isNeg ? ((s = RSAUtils.biCopy(c)).isNeg = !t.isNeg,
+                    i.isNeg = !1,
+                    t.isNeg = !1,
+                    r = biSubtract(t, i),
+                    i.isNeg = !0,
+                    t.isNeg = l) : (s = new v,
+                    r = RSAUtils.biCopy(i)),
+                    [s, r];
+            s = new v,
+                r = i;
+            for (var n = Math.ceil(g / N) - 1, d = 0; t.digits[n] < 32768;)
+                t = RSAUtils.biShiftLeft(t, 1),
+                    ++d,
+                    ++g,
+                    n = Math.ceil(g / N) - 1;
+            r = RSAUtils.biShiftLeft(r, d),
+                e += d;
+            for (var o = Math.ceil(e / N) - 1, u = RSAUtils.biMultiplyByRadixPower(t, o - n); -1 != RSAUtils.biCompare(r, u);)
+                ++s.digits[o - n],
+                    r = RSAUtils.biSubtract(r, u);
+            for (var S = o; n < S; --S) {
+                var a = S >= r.digits.length ? 0 : r.digits[S]
+                    , b = S - 1 >= r.digits.length ? 0 : r.digits[S - 1]
+                    , A = S - 2 >= r.digits.length ? 0 : r.digits[S - 2]
+                    , R = n >= t.digits.length ? 0 : t.digits[n]
+                    , h = n - 1 >= t.digits.length ? 0 : t.digits[n - 1];
+                s.digits[S - n - 1] = a == R ? M : Math.floor((a * m + b) / R);
+                for (var U = s.digits[S - n - 1] * (R * m + h), f = 4294967296 * a + (b * m + A); f < U;)
+                    --s.digits[S - n - 1],
+                        U = s.digits[S - n - 1] * (R * m | h),
+                        f = a * m * m + (b * m + A);
+                u = RSAUtils.biMultiplyByRadixPower(t, S - n - 1),
+                (r = RSAUtils.biSubtract(r, RSAUtils.biMultiplyDigit(u, s.digits[S - n - 1]))).isNeg && (r = RSAUtils.biAdd(r, u),
+                    --s.digits[S - n - 1])
+            }
+            return r = RSAUtils.biShiftRight(r, d),
+                s.isNeg = i.isNeg != l,
+            i.isNeg && (s = l ? RSAUtils.biAdd(s, c) : RSAUtils.biSubtract(s, c),
+                t = RSAUtils.biShiftRight(t, d),
+                r = RSAUtils.biSubtract(t, r)),
+            0 == r.digits[0] && 0 == RSAUtils.biHighIndex(r) && (r.isNeg = !1),
+                [s, r]
+        }
+        ,
+        RSAUtils.biDivide = function (i, t) {
+            return RSAUtils.biDivideModulo(i, t)[0]
+        }
+        ,
+        RSAUtils.biModulo = function (i, t) {
+            return RSAUtils.biDivideModulo(i, t)[1]
+        }
+        ,
+        RSAUtils.biMultiplyMod = function (i, t, s) {
+            return RSAUtils.biModulo(RSAUtils.biMultiply(i, t), s)
+        }
+        ,
+        RSAUtils.biPow = function (i, t) {
+            for (var s = c, r = i; 0 != (1 & t) && (s = RSAUtils.biMultiply(s, r)),
+            0 != (t >>= 1);)
+                r = RSAUtils.biMultiply(r, r);
+            return s
+        }
+        ,
+        RSAUtils.biPowMod = function (i, t, s) {
+            for (var r = c, e = i, g = t; 0 != (1 & g.digits[0]) && (r = RSAUtils.biMultiplyMod(r, e, s)),
+            0 != (g = RSAUtils.biShiftRight(g, 1)).digits[0] || 0 != RSAUtils.biHighIndex(g);)
+                e = RSAUtils.biMultiplyMod(e, e, s);
+            return r
+        }
+        ,
+        e.BarrettMu = function (i) {
+            this.modulus = RSAUtils.biCopy(i),
+                this.k = RSAUtils.biHighIndex(this.modulus) + 1;
+            var t = new v;
+            t.digits[2 * this.k] = 1,
+                this.mu = RSAUtils.biDivide(t, this.modulus),
+                this.bkplus1 = new v,
+                this.bkplus1.digits[this.k + 1] = 1,
+                this.modulo = u,
+                this.multiplyMod = S,
+                this.powMod = a
+        }
+    ;
 
-function RSAKeyPair(n, t, i) {
-    this.e = biFromHex(n);
-    this.d = biFromHex(t);
-    this.m = biFromHex(i);
-    this.digitSize = 2 * biHighIndex(this.m) + 2;
-    this.chunkSize = this.digitSize - 11;
-    this.radix = 16;
-    this.barrett = new BarrettMu(this.m)
-}
-
-function twoDigit(n) {
-    return (n < 10 ? "0" : "") + String(n)
-}
-
-function encryptedString(n, t) {
-    var e, o, s, h, c, i, f, u, v, l, y;
-    if (n.chunkSize > n.digitSize - 11)
-        return "Error";
-    for (var a = [], p = t.length, r = 0; r < p;)
-        a[r] = t.charCodeAt(r),
-            r++;
-    for (e = a.length,
-             o = "",
-             r = 0; r < e; r += n.chunkSize) {
-        for (c = new BigInt,
-                 s = 0,
-                 f = r + n.chunkSize > e ? e % n.chunkSize : n.chunkSize,
-                 u = [],
-                 i = 0; i < f; i++)
-            u[i] = a[r + f - 1 - i];
-        for (u[f] = 0,
-                 v = Math.max(8, n.digitSize - 3 - f),
-                 i = 0; i < v; i++)
-            u[f + 1 + i] = Math.floor(Math.random() * 254) + 1;
-        for (u[n.digitSize - 2] = 2,
-                 u[n.digitSize - 1] = 0,
-                 h = 0; h < n.digitSize; ++s)
-            c.digits[s] = u[h++],
-                c.digits[s] += u[h++] << 8;
-        l = n.barrett.powMod(c, n.e);
-        y = n.radix == 16 ? biToHex(l) : biToString(l, n.radix);
-        o += y + " "
+    function b(i, t, s) {
+        var r = RSAUtils;
+        this.e = r.biFromHex(i),
+            this.d = r.biFromHex(t),
+            this.m = r.biFromHex(s),
+            this.chunkSize = 2 * r.biHighIndex(this.m),
+            this.radix = 16,
+            this.barrett = new e.BarrettMu(this.m)
     }
-    return o.substring(0, o.length - 1)
-}
 
-function decryptedString(n, t) {
-    for (var e = t.split(" "), i = "", r, u, o, f = 0; f < e.length; ++f)
-        for (o = n.radix === 16 ? biFromHex(e[f]) : biFromString(e[f], n.radix),
-                 u = n.barrett.powMod(o, n.d),
-                 r = 0; r <= biHighIndex(u); ++r)
-            i += String.fromCharCode(u.digits[r] & 255, u.digits[r] >> 8);
-    return i.charCodeAt(i.length - 1) === 0 && (i = i.substring(0, i.length - 1)),
-        i
-}
-
-var biRadixBase = 2, biRadixBits = 16, bitsPerDigit = biRadixBits, biRadix = 65536, biHalfRadix = biRadix >>> 1,
-    biRadixSquared = biRadix * biRadix, maxDigitVal = biRadix - 1, maxInteger = 9999999999999998, maxDigits, ZERO_ARRAY,
-    bigZero, bigOne, dpl10, lr10, hexatrigesimalToChar, hexToChar, highBitMasks, lowBitMasks;
-setMaxDigits(20);
-dpl10 = 15;
-lr10 = biFromNumber(1e15);
-hexatrigesimalToChar = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-hexToChar = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
-highBitMasks = [0, 32768, 49152, 57344, 61440, 63488, 64512, 65024, 65280, 65408, 65472, 65504, 65520, 65528, 65532, 65534, 65535];
-lowBitMasks = [0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535];
-setMaxDigits(129);
-
-const rsa = new RSAKeyPair("010001", "", "008baf14121377fc76eaf7794b8a8af17085628c3590df47e6534574efcfd81ef8635fcdc67d141c15f51649a89533df0db839331e30b8f8e4440ebf7ccbcc494f4ba18e9f492534b8aafc1b1057429ac851d3d9eb66e86fce1b04527c7b95a2431b07ea277cde2365876e2733325df04389a9d891c5d36b7bc752140db74cb69f");
-module.exports = function (pwd) {
-    return encryptedString(rsa, pwd);
-}
+    RSAUtils.getKeyPair = function (i, t, s) {
+        return new b(i, t, s)
+    }
+        ,
+    void 0 === e.twoDigit && (e.twoDigit = function (i) {
+            return (i < 10 ? "0" : "") + String(i)
+        }
+    ),
+        RSAUtils.encryptedString = function (i, t) {
+            for (var s = [], r = t.length, e = 0; e < r;)
+                s[e] = t.charCodeAt(e),
+                    e++;
+            for (; s.length % i.chunkSize != 0;)
+                s[e++] = 0;
+            var g, l, n, d = s.length, o = "";
+            for (e = 0; e < d; e += i.chunkSize) {
+                for (n = new v,
+                         g = 0,
+                         l = e; l < e + i.chunkSize; ++g)
+                    n.digits[g] = s[l++],
+                        n.digits[g] += s[l++] << 8;
+                var u = i.barrett.powMod(n, i.e);
+                o += (16 == i.radix ? RSAUtils.biToHex(u) : RSAUtils.biToString(u, i.radix)) + " "
+            }
+            return o.substring(0, o.length - 1)
+        }
+        ,
+        RSAUtils.decryptedString = function (i, t) {
+            var s, r, e, g = t.split(" "), l = "";
+            for (s = 0; s < g.length; ++s) {
+                var n;
+                for (n = 16 == i.radix ? RSAUtils.biFromHex(g[s]) : RSAUtils.biFromString(g[s], i.radix),
+                         e = i.barrett.powMod(n, i.d),
+                         r = 0; r <= RSAUtils.biHighIndex(e); ++r)
+                    l += String.fromCharCode(255 & e.digits[r], e.digits[r] >> 8)
+            }
+            return 0 == l.charCodeAt(l.length - 1) && (l = l.substring(0, l.length - 1)),
+                l
+        }
+        ,
+        RSAUtils.setMaxDigits(130)
+}(global);
 

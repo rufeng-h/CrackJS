@@ -17,8 +17,7 @@ function parseParams(e) {
 function signEnc() {
     var e = {
         appkey: appkey,
-        // cid: "566f0dea14d24b778c157aabe2c243a9",
-        cid: "",
+        // cid: "",
         deviceid: "",
         expire: "180",
         nonce: Math.ceil(1e6 * Math.random()),

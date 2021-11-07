@@ -31,7 +31,8 @@ headers = {
 
 def encrypt(msg: str) -> str:
     h = hashlib.md5(msg.encode()).hexdigest()
-    return base64.b64encode((h[0:8] + base64.b64encode(msg.encode()).decode() + h[10: 14]).encode()).decode()
+    return base64.b64encode((h[0:8] + base64.b64encode(msg.encode()).decode() +
+                             h[10: 14]).encode()).decode()
 
 
 def timestamp():
@@ -46,7 +47,7 @@ def get_key(response):
 session = requests.session()
 
 if __name__ == '__main__':
-    mobile, password = "18280484271", "Aa1234567890."
+    mobile, password = "", ""
     response = session.get("https://my.leju.com/web/sso/loginview", headers=headers)
     session.get(
         "https://my.leju.com/Settings/Findpwd/isReg",
