@@ -50,9 +50,6 @@ def anti_spider():
     enc_data = re.search(r"\('(.*?)'\)", res.text).group(1)
     data = session.post("http://127.0.0.1:8000/decrypt", data={"data": enc_data}).json()['data']
     cid, deviceid, token, _ = data.split('')
-    print(cid, deviceid, token)
-    today = datetime.datetime.now()
-    appkey, v, dt = 'gk1leqzjj6u65bd2zbal', '10012', '%s%s%s%s' % (today.year, today.month - 1, today.day, today.hour)
     from browser import browser_feature
     browser_feature['xxzl_cid'] = cid
     browser_feature['sessionid'] = token
@@ -65,6 +62,7 @@ def anti_spider():
     res = session.post("http://127.0.0.1:8000/decryptBrowser", data={"data": res.text})
     anti_data = res.json()['data']
     *_, xxzl_cid, xzuid = anti_data.split('')
+    print(xxzl_cid, xzuid)
     session.cookies.set("xxzl_cid", xxzl_cid)
     session.cookies.set("xzuid", xzuid)
 
@@ -107,12 +105,14 @@ def request_stb():
 
 
 if __name__ == '__main__':
-    username, password = "18280484271", "Aa1234567890"
+    username, password = "", ""
     # 登陆页面
     session.get("https://login.anjuke.com/login/form", headers=headers)
     token = get_token()
     enc_pwd = session.post("http://127.0.0.1:8000/signPwd", data={"password": password}).text
     time.sleep(3)
-    res = do_login(token, username, enc_pwd)
-    print(res.text)
-    print(session.get("https://login.anjuke.com/login/success", headers=headers).text)
+    # res = do_login(token, username, enc_pwd)
+    # print(res.text)
+    # print(session.get("https://login.anjuke.com/login/success", headers=headers).text)
+
+    anti_spider()

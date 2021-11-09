@@ -3,15 +3,14 @@
  date 2021/11/08/17:58
  description 
 """
+import base64
 import copy
 import json
 import re
 import time
-from scrapy import Selector
 
 import requests
-import base64
-from urllib.parse import quote
+from scrapy import Selector
 
 
 def enc_username(username: str) -> str:
