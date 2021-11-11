@@ -288,7 +288,7 @@ if ("sogou" != browserTypeReal) {
             var a = this;
             /* 此处修改 */
             n && (a.monit && clearInterval(a.monit), a.monit = function () {
-            };
+            });
             //     a.monit = setInterval(function () {
             //     var e = a.getCookie(t);
             //     e && "" != e && "-1" != e || "sogou" == browserTypeReal || _0xd7e6c.set(t, n)

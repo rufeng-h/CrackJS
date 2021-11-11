@@ -188,4 +188,5 @@ if __name__ == '__main__':
     servertime, pcid, nonce, pubkey, rsakv, exec_time = pre_login(username)
     login_res = do_login(username, password, servertime, nonce, rsakv, pubkey, exec_time, pre_login_time_start)
     redirect_url = re.search('location\.replace\("(.*?)"\)', login_res.content.decode("gbk")).group(1)
+    res = session.get(redirect_url, headers=headers)
     redirect(redirect_url)
