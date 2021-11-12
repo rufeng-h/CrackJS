@@ -7,9 +7,39 @@ import pickle
 import re
 import time
 from pathlib import Path
+import typing
+from abc import ABCMeta, abstractmethod
 
 import requests
 from redis import StrictRedis
+from requests import Session
+
+
+class SessionManager(metaclass=ABCMeta):
+    @abstractmethod
+    def store_session(self, session: Session):
+        raise NotImplementedError
+
+    @abstractmethod
+    def load_session(self, **kwargs):
+        raise NotImplementedError
+
+
+class RedisSessionManager(SessionManager):
+    def __init__(self, username):
+        self._redis = StrictRedis()
+        self._redis_key = f"weibo:login:{username}"
+
+    def store_session(self, session: Session):
+        oo = io.BytesIO()
+        pickle.dump(session, oo)
+        self._redis.set(self._redis_key, oo.getvalue())
+
+    def load_session(self, **kwargs) -> typing.Union[Session, None]:
+        value = self._redis.get(self._redis_key)
+        if not value:
+            return None
+        return pickle.loads(value)
 
 
 def jsoncallback_str2json(text: str) -> dict:
@@ -17,10 +47,9 @@ def jsoncallback_str2json(text: str) -> dict:
 
 
 class WeiboLoginScanQrCode(object):
-    def __init__(self, username):
-        self.redis_prefix = f"weibo:login:{username}"
-        self._redis = StrictRedis()
-        self.session = self._load_from_redis() or requests.Session()
+    def __init__(self, session_manager: SessionManager = None, **kwargs):
+        self.session_manager = session_manager
+        self.session = (session_manager and session_manager.load_session(**kwargs)) or requests.session()
         headers = {
             'Accept': '*/*',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -143,7 +172,8 @@ class WeiboLoginScanQrCode(object):
 
         print(f"uid: {uid}, nickname: {nick}, 登录成功!")
 
-        self._store2redis()
+        if self.session_manager:
+            self.session_manager.store_session(self.session)
 
         return self.session
 
@@ -156,17 +186,7 @@ class WeiboLoginScanQrCode(object):
         for k, v in cookies.items():
             self.session.cookies.set(k, v)
 
-    def _store2redis(self):
-        oo = io.BytesIO()
-        pickle.dump(self.session, oo)
-        self._redis.set(self.redis_prefix, oo.getvalue())
-
-    def _load_from_redis(self):
-        value = self._redis.get(self.redis_prefix)
-        if not value:
-            return None
-        return pickle.loads(value)
-
 
 if __name__ == '__main__':
-    session = WeiboLoginScanQrCode(18280484271).login()
+    s = RedisSessionManager(18280484271)
+    session = WeiboLoginScanQrCode(session_manager=s).login()
