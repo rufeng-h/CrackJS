@@ -3,7 +3,7 @@ const rsaEncrypt = require('./rsa');
 const aes = require('./aes');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 8000;
+const port = process.env.crackLoginServerPort || 8000;
 
 app.use(bodyParser.urlencoded({limit: "2100000kb"}));
 
@@ -32,6 +32,6 @@ app.get('/signEnc', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`node server listening at http://localhost:${port}`)
 });
 

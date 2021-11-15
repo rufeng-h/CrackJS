@@ -23,10 +23,10 @@ def timestamp():
 
 def pre_login(username: str) -> tuple:
     tmp_headers = copy.copy(headers)
-    tmp_headers["Host"] = "login.sina.com.cn"
     tmp_headers["Referer"] = "https://weibo.com/"
     url = "https://login.sina.com.cn/sso/prelogin.php?entry=weibo&callback=sinaSSOController.preloginCallBack&su={}&rsakt=mod&checkpin=1&client=ssologin.js(v1.4.19)&_{}"
     response = session.get(url.format(enc_username(username), timestamp()), headers=tmp_headers)
+    print(response.text)
     data = json.loads(re.search('({.*?})', response.text).group(1))
     return data.get("servertime"), data.get("pcid"), data.get("nonce"), data.get("pubkey"), data.get("rsakv"), data.get(
         'exectime')
@@ -99,11 +99,13 @@ def redirect(url):
         ret = session.post("https://passport.weibo.com/protection/mobile/confirm?token={}".format(token),
                            headers=tmp_headers, data={"encrypt_mobile": encrypt_mobile,
                                                       "code": code}).json()
+        print(ret)
         if ret['code'] != 20000000:
             print(ret['msg'])
             continue
 
         redirect_url = ret['data']["redirect_url"]
+        break
     if not redirect_url:
         exit(0)
 
@@ -188,5 +190,5 @@ if __name__ == '__main__':
     servertime, pcid, nonce, pubkey, rsakv, exec_time = pre_login(username)
     login_res = do_login(username, password, servertime, nonce, rsakv, pubkey, exec_time, pre_login_time_start)
     redirect_url = re.search('location\.replace\("(.*?)"\)', login_res.content.decode("gbk")).group(1)
-    res = session.get(redirect_url, headers=headers)
+    # res = session.get(redirect_url, headers=headers)
     redirect(redirect_url)
